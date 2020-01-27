@@ -30,3 +30,16 @@ This app should now work for you once these have all been set. To launch the app
 To make this app automatically launch and check for test dates you can use windows built in task scheduler and set it up to execute the batch file every x minutes (I've got mine to check every 15m).
 
 An tutorial of how to use windows task scheduler can be found here: https://www.digitalcitizen.life/how-create-task-basic-task-wizard
+
+# Dependencies.
+
+You will need to install the following things:
+
+        Node.JS : https://nodejs.org/en/
+        
+And the following Node.JS NPM Modules:
+
+        Apify : https://www.npmjs.com/package/apify
+        Puppeteer : https://www.npmjs.com/package/puppeteer
+        Cheerio : https://www.npmjs.com/package/cheerio
+        NodeMailer : https://www.npmjs.com/package/nodemailer
