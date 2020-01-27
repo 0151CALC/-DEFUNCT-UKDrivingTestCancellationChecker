@@ -1,4 +1,4 @@
-# UKDrivingTestCancellationChecker
+# UKDrivingTestCancellationChecker Node.JS
 Checks the Gov Driving Test Website for a test date within a certain range of dates and times.
 
 There are a few parameters that need to be changed within the app.js file before this will work for you.
