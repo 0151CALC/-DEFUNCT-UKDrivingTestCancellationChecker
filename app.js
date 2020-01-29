@@ -11,7 +11,7 @@ const nodemailer = require('nodemailer');
         var dateTo = new Date('2020-03-05') // Date to check To
         var timesWanted = [] // Make empty if any time ['9:54am', '10:51am', '12:18pm'] use this format (with am and pm and :)
         var sendEmailTo = 'John Doe yourEmail@gmail.com' // Email address where the email will be sent (you can use your gmail again and it will just look like you are sending yourself emails)
-        var emailFrom = 'John Doe yourEmail@gmail.com' // Your Gmail address and name (name can be differant it just what shows on the email sent out)
+        var emailFrom = 'Driving Test Checker yourEmail@gmail.com' // Replace yourEmail@gmail.com with your Gmail Address.
 
         var gmailLoginUser = 'yourEmail@gmail.com' // Your Gmail address goes here.
         var googleAppPass = '' // Put the APP Password here. You can make one using this link: https://support.google.com/accounts/answer/185833?hl=en
