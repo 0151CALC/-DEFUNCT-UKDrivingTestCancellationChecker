@@ -2,6 +2,7 @@ const Apify = require('apify');
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 const nodemailer = require('nodemailer');
+const fs = require('fs');
 
 // PARAMETERS GO HERE
 
@@ -19,6 +20,7 @@ const nodemailer = require('nodemailer');
 /////////////
 
 datesIwant = [] // array to hold the days that we want
+var lastEmailContent = '';
 
 Apify.main(async () => {
 
@@ -95,20 +97,39 @@ Apify.main(async () => {
     // We now have an array with just the avaliable days that we want that are within our given range
     //console.log(datesIwant)
 
-    console.log(datesIwant)
+    console.log('');
+    if (datesIwant.length > 0) {
+        for (i = 0; i < datesIwant.length; i++) { // Pretty Console print out of times.
+            console.log(datesIwant[i].date)
+            for (j = 0; j < datesIwant[i].avaliableTimes.length; j++) {
+                console.log('   ' + datesIwant[i].avaliableTimes[j])
+            }
+        }
+    } else {
+        console.log('No Driving Test Avaliable :(')
+    }
 
+
+    lastEmailContent = await getLastEmail()
     emailSent = await sendEmail();
-
-    console.log(emailSent)
 
     await page.close();
     await browser.close();
 });
 
+function getLastEmail() {
+    return new Promise(resolve => {
+       fs.readFile("lastEmailSentContents.txt", "utf-8", function(err, lastEmailSentContents) {
+           resolve(lastEmailSentContents);
+       });
+   })
+}
+
 function sendEmail() {
     return new Promise(resolve => {
         var emailContent = '';
         var emailSubject = '';
+
         if (datesIwant.length > 0) {
 
             emailSubject = 'A Driving test date with your parameters is avaliable!';
@@ -130,13 +151,21 @@ function sendEmail() {
                 }
                 emailContent += '</ul>'
             }
-
             emailContent += '</ul>'
-
-            console.log(emailContent)
+            fs.writeFile("lastEmailSentContents.txt", emailContent, (err) => {
+              if (err) console.log(err);
+              console.log("Successfully Wrote Email Content to File.");
+            });
         } else {
-            emailContent += '<h2>No Driving Test Avaliable</h2>';
-            emailSubject = 'No Driving Test Avaliable :(';
+            emailSubject = 'No Driving Test Avaliable';
+            emailContent += '<h4>A Driving Test was not found using your current parameters of:</h4>';
+
+            emailContent = emailContent + '\n<p>Between ' + getFormattedDate(dateFrom) + ' and ' + getFormattedDate(dateTo) + '</p>'
+            emailContent = emailContent + '\n<p>Only times avaliable of ' + timesWanted + '</p>'
+        }
+
+        if (emailContent == lastEmailContent) { // If copy of the last email sent add COPY to the end of the subject
+            emailSubject += ' COPY'
         }
 
         var transporter = nodemailer.createTransport({
@@ -164,7 +193,7 @@ function sendEmail() {
                 console.log(err)
                 resolve('Email Error')
             } else {
-                resolve('Email Sent')
+                resolve('Email Sent Successfully')
             }
         })
     })
