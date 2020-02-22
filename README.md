@@ -1,7 +1,7 @@
 # UKDrivingTestCancellationChecker Node.JS
 Checks the Gov Driving Test Website for a test date within a certain range of dates and times.
 
-There are a few parameters that need to be changed within the app.js file before this will work for you.
+There are a few parameters that need to be changed within the details.json file before this will work for you.
 
 Firstly you need to add in your license number and referance number.
 
@@ -9,11 +9,11 @@ Next you will need to specify the dates from and to that you want the applicatio
 
 This app also allows you to only flag test dates that have specific times avaliable. For example you may want a test date somewhere between the 2nd of feburary and the 5th of march but you only want a test at either 10:51am or 9:54am. 
 
-To do this you would have in your parameters:
+To do this you would have in your details JSON file:
 
-        var dateFrom = new Date('2020-02-02') 
-        var dateTo = new Date('2020-03-05')
-        var timesWanted = ['10:51am', '9:54am']
+        dateFrom : "2020-02-02",
+        dateTo : "2020-03-05",
+        timesWanted : ["10:51am", "9:54am"]
         
 Next you will need to set the email address of where you want the emails to be sent to.
 
