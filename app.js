@@ -4,20 +4,9 @@ const cheerio = require('cheerio');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 
-// PARAMETERS GO HERE
 
-        var licenceNumber = '' // Your License number
-        var refNumber = '' // Your referance number
-        var dateFrom = new Date('2020-02-02') // Date to check from
-        var dateTo = new Date('2020-03-05') // Date to check To
-        var timesWanted = [] // Make empty if any time ['9:54am', '10:51am', '12:18pm'] use this format (with am and pm and :)
-        var sendEmailTo = 'John Doe yourEmail@gmail.com' // Email address where the email will be sent (you can use your gmail again and it will just look like you are sending yourself emails)
-        var emailFrom = 'Driving Test Checker yourEmail@gmail.com' // Replace yourEmail@gmail.com with your Gmail Address.
-
-        var gmailLoginUser = 'yourEmail@gmail.com' // Your Gmail address goes here.
-        var googleAppPass = '' // Put the APP Password here. You can make one using this link: https://support.google.com/accounts/answer/185833?hl=en
-
-/////////////
+var details = JSON.parse(fs.readFileSync("details.json"));
+var dateFrom = new Date(details.dateFrom);
 
 datesIwant = [] // array to hold the days that we want
 var lastEmailContent = '';
@@ -41,8 +30,8 @@ Apify.main(async () => {
 
     //await page.screenshot({path: 'banned.png'});
 
-    await page.type('#driving-licence-number', licenceNumber);
-    await page.type('#application-reference-number', refNumber);
+    await page.type('#driving-licence-number', details.licenceNumber);
+    await page.type('#application-reference-number', details.refNumber);
     await page.click('#booking-login'); // Click Login
 
     await page.click('#date-time-change'); // Click Change date
@@ -80,10 +69,10 @@ Apify.main(async () => {
     for (i = 0; i < dates.length; i++) { // For every avaliable day
         var date = new Date(dates[i].dateInFormat) // create a date object from that days date format
         if ((date > dateFrom) && (date < dateTo)) { // If its within our range
-            if (timesWanted.length > 0) { // If checking times
+            if (details.timesWanted.length > 0) { // If checking times
                 var timesAvaliable = dates[i].avaliableTimes; // Get avaliable times on this day
-                for (j = 0; j < timesWanted.length; j++) { // For every time wanted
-                    if (timesAvaliable.includes(timesWanted[j])) { // Check if the time is avaliable on the current day
+                for (j = 0; j < details.timesWanted.length; j++) { // For every time wanted
+                    if (timesAvaliable.includes(details.timesWanted[j])) { // Check if the time is avaliable on the current day
                         datesIwant.push(dates[i]) // If it is push it in
                         break; // No need to continue checking once one is found
                     }
@@ -125,6 +114,19 @@ function getLastEmail() {
    })
 }
 
+function getFormattedDate(date) {
+    var dateDay = date.getDate()
+    var dateMonth = date.getMonth() + 1
+    var dateYear = date.getFullYear()
+    if (dateDay < 10) {
+        dateDay = '0' + dateDay;
+    }
+    if (dateMonth < 10) {
+        dateMonth = '0' + dateMonth;
+    }
+    return dateDay + '/' + dateMonth + '/' + dateYear
+}
+
 function sendEmail() {
     return new Promise(resolve => {
         var emailContent = '';
@@ -161,7 +163,7 @@ function sendEmail() {
             emailContent += '<h4>A Driving Test was not found using your current parameters of:</h4>';
 
             emailContent = emailContent + '\n<p>Between ' + getFormattedDate(dateFrom) + ' and ' + getFormattedDate(dateTo) + '</p>'
-            emailContent = emailContent + '\n<p>Only times avaliable of ' + timesWanted + '</p>'
+            emailContent = emailContent + '\n<p>Only times avaliable of ' + details.timesWanted + '</p>'
         }
 
         if (emailContent == lastEmailContent) { // If copy of the last email sent add COPY to the end of the subject
@@ -173,8 +175,8 @@ function sendEmail() {
             secure: false,
             port: 25,
             auth: {
-                user: gmailLoginUser,
-                pass: googleAppPass
+                user: details.gmailLoginUser,
+                pass: details.googleAppPass
             },
             tls: {
                 rejectUnauthorized: false
@@ -182,8 +184,8 @@ function sendEmail() {
         })
 
         let mailOptions = {
-            from: emailFrom,
-            to: sendEmailTo,
+            from: details.emailFrom,
+            to: details.sendEmailTo,
             subject: emailSubject,
             html: emailContent
         }

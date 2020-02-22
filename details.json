@@ -1,0 +1,13 @@
+{
+
+    "licenceNumber" : "",
+    "refNumber" : "",
+    "dateFrom" : "2020-02-02",
+    "dateTo" : "2020-07-05",
+    "timesWanted" : ["7:50am","8:47am","9:54am"],
+    "sendEmailTo" : "",
+    "emailFrom" : "Driving Test Checker yourEmail@gmail.com",
+    "gmailLoginUser" : "yourEmail@gmail.com",
+    "googleAppPass" : "SEE README.TXT"
+
+}
