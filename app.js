@@ -35,7 +35,7 @@ Apify.main(async () => {
     await page.goto('https://driverpracticaltest.dvsa.gov.uk/login');
 
     //await page.screenshot({path: 'banned.png'});
-
+    await page.waitFor('#driving-licence-number'); // wait for the queueit
     await page.type('#driving-licence-number', details.licenceNumber);
     await page.type('#application-reference-number', details.refNumber);
     await page.click('#booking-login'); // Click Login
