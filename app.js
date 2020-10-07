@@ -7,9 +7,13 @@ const fs = require('fs');
 
 var details = JSON.parse(fs.readFileSync("details.json"));
 var dateFrom = new Date(details.dateFrom);
+var dateTo = new Date(details.dateTo);
 
 datesIwant = [] // array to hold the days that we want
 var lastEmailContent = '';
+
+const { log } = Apify.utils;
+log.setLevel(log.LEVELS.ERROR);
 
 Apify.main(async () => {
 
@@ -18,13 +22,15 @@ Apify.main(async () => {
     var mins = now.getMinutes();
 
     if (hours < 6 || (hours > 22 && mins > 39)) {
-        await page.close();
-        await browser.close();
+        console.info("Out of working hours!");
+        return;
     }
 
-    const browser = await Apify.launchPuppeteer({});
+    const browser = await Apify.launchPuppeteer({
+        stealth: true,
+        useChrome: true
+    });
     const page = await browser.newPage();
-    await Apify.utils.puppeteer.hideWebDriver(page)
 
     await page.goto('https://driverpracticaltest.dvsa.gov.uk/login');
 
@@ -88,6 +94,7 @@ Apify.main(async () => {
 
     console.log('');
     if (datesIwant.length > 0) {
+        console.log("Slot Found!");
         for (i = 0; i < datesIwant.length; i++) { // Pretty Console print out of times.
             console.log(datesIwant[i].date)
             for (j = 0; j < datesIwant[i].avaliableTimes.length; j++) {
@@ -98,7 +105,7 @@ Apify.main(async () => {
         console.log('No Driving Test Avaliable :(')
     }
 
-
+    // Notification. Feel free to change it to Slack Notification
     lastEmailContent = await getLastEmail()
     emailSent = await sendEmail();
 
