@@ -1,0 +1,26 @@
+{
+  "name": "ukdrivingtestcancellationchecker",
+  "version": "1.0.0",
+  "description": "Checks the Gov Driving Test Website for a test date within a certain range of dates and times.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ileodo/UKDrivingTestCancellationChecker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ileodo/UKDrivingTestCancellationChecker/issues"
+  },
+  "homepage": "https://github.com/ileodo/UKDrivingTestCancellationChecker#readme",
+  "dependencies": {
+    "apify": "^0.21.7",
+    "cheerio": "^1.0.0-rc.3",
+    "fs": "0.0.1-security",
+    "nodemailer": "^6.4.13",
+    "puppeteer": "^5.3.1"
+  }
+}
