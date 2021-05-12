@@ -20,7 +20,7 @@
     "apify": "^0.21.7",
     "cheerio": "^1.0.0-rc.3",
     "fs": "0.0.1-security",
-    "nodemailer": "^6.4.13",
+    "nodemailer": "^6.4.16",
     "puppeteer": "^5.3.1"
   }
 }
