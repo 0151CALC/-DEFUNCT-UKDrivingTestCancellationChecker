@@ -1,4 +1,9 @@
-# DEFUNCT UKDrivingTestCancellationChecker Node.JS
+# [DEFUNCT] -UKDrivingTestCancellationChecker Node.JS
+
+Unfortunately this project is defunct. It no longer works due to the UK Gov driving test booking website implementing captcha. There is no way for me to get around this other then using one of the captcha solving services (which are not free 😥). RIP Project.
+
+## Details:
+
 Checks the Gov Driving Test Website for a test date within a certain range of dates and times.
 
 There are a few parameters that need to be changed within the details.json file before this will work for you.
